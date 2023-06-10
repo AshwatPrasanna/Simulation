@@ -1,0 +1,27 @@
+ChatGPT Instructions:
+
+Definitions:
+- “Changes” of a binary number (any number of bits) refers to the number of times where a bit is different to the one before it (therefore, the first bit never counts as a change). For instance, the number 101101 has 4 changes.
+- 3C = changes(3n) - changes(n)
+- “HNum”, for a value of n, refers to the largest of [the numbers of Changes of (all n-digit binary numbers with a positive 3C)]
+
+Goal: To output the HNum of a range of values of n, from 0 to 40. The goal is to minimise runtime (anything is permitted). The program should include multiprocessing with 96 functional cores, which should ideally all be utilised.
+
+Init.py (Python):
+- Empty file
+
+Main.py (Python): Creates different process (multiprocessing, not multithreading) to run ‘process’ for different groups of numbers
+- For n values of 0 to 40 (in a loop), hNum values must be output
+- The device running this program will have 96 cores (vCPUs)
+- Note that HNum must be calculated for ALL digits of a certain number of digits (n digits). 
+- 'process' will be called when the HNum of a value needs to be calculated
+
+process (C++ file):
+- This will be run by main.py
+- Calculate the HNum value for a provided n value
+- Output the HNum value
+- This will be run multiple times; therefore, ensure it is AS EFFICIENT AS POSSIBLE 
+
+# Ensure this code is functional, accurate, and efficient
+# After this, run the original ChatGPT code (hVals in decimal, not binary)
+# Line 21 may be >= in process.cpp
