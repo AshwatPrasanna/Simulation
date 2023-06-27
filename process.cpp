@@ -2,14 +2,14 @@
 #include <cmath>
 
 int calculate_changes(int n) {
-    int changes = 0;
-    while (n > 0) {
-        if (n != (n >> 1)) {
-            changes++;
-        }
-        n >>= 1;
+    int changes = (n ^ (n >> 1));
+    
+    int count = 0;
+    while (changes != 0) {
+        count++;
+        changes = changes & (changes - 1);
     }
-    return changes - 1;
+    return count - 1;
 }
 
 int calculate_hnum(int n) {
@@ -19,9 +19,8 @@ int calculate_hnum(int n) {
 
         if (changes > hnum) {
             int changes_3n = calculate_changes(i * 3);
-            int three_c = changes_3n - changes;
 
-            if (three_c > 0) {
+            if (changes_3n - changes > 0) {
                 hnum = changes;
             }
         }
@@ -30,6 +29,6 @@ int calculate_hnum(int n) {
 }
 
 int main(int argc, char* argv[]) {
-    std::cout << calculate_changes(std::stoi(argv[1])) << std::endl;
+    std::cout << calculate_hnum(std::stoi(argv[1])) << std::endl;
     return 0;
 }
