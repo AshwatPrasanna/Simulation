@@ -1,34 +1,53 @@
 #include <iostream>
-#include <cmath>
+#include <stdio.h>
+#include <unistd.h>
+#include <stdlib.h>
+#include <sys/wait.h>
+#include <string.h>
 
-int calculate_changes(int n) {
-    int changes = (n ^ (n >> 1));
-    
+using namespace std;
+
+int changes(long long unsigned int num) {
+    long long unsigned int changesbit = (((num << 1)^(num))>>1);
+
+    // Kernighan's algorithm to count number of set bits
     int count = 0;
-    while (changes != 0) {
+
+    while (changesbit>0) {
+        changesbit = changesbit&(changesbit-1);
         count++;
-        changes = changes & (changes - 1);
     }
-    return count - 1;
+
+    return count-1;
 }
 
-int calculate_hnum(int n) {
-    int hnum = 0;
-    for (int i = (1 << (n - 1)); i < (1 << n); i++) {
-        int changes = calculate_changes(i);
+int calculate_h_k(long long unsigned int lower, long long unsigned int upper) {
+    int h_k = 0;
 
-        if (changes > hnum) {
-            int changes_3n = calculate_changes(i * 3);
+    for (long long unsigned int i = lower; i<upper; i++) {
+        int c = changes(i);
 
-            if (changes_3n - changes > 0) {
-                hnum = changes;
+        if (c > h_k) {
+            if (changes(3*i) >= c) {
+                h_k = c;
             }
         }
     }
-    return hnum;
+
+    return h_k;
 }
 
 int main(int argc, char* argv[]) {
-    std::cout << calculate_hnum(std::stoi(argv[1])) << std::endl;
-    return 0;
+
+    if (argc != 3) {
+        throw ("Needs 2 arguments exactly!"); // These are the bounds, inclusive, exclusive respectively
+    }
+    
+    long long unsigned int lowerlimit = (long long unsigned int)stoll(string(argv[1]));
+    long long unsigned int upperlimit = (long long unsigned int)stoll(string(argv[2]));
+
+    cout << "Using range " << lowerlimit << ":" << upperlimit;
+
+    return calculate_h_k(lowerlimit, upperlimit);
 }
+
